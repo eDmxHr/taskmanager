@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\User;
+use App\TaskStatus;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -20,7 +21,8 @@ class TasksFactory extends Factory
         return [
             'title' => fake()->name(),
             'user_id' => User::factory(),
-            'description' => fake()->realText($maxNbChars = 200, $indexSize = 2)
+            'description' => fake()->realText($maxNbChars = 200, $indexSize = 2),
+            'status' => TaskStatus::PENDING
         ];
     }
 }

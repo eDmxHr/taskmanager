@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\TaskStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -17,4 +18,8 @@ class Tasks extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public $casts = [
+        'status' => TaskStatus::class,
+    ];
 }

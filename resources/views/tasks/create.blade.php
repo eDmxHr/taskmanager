@@ -1,3 +1,8 @@
+@php
+    use App\TaskStatus;
+
+@endphp
+
 <x-layout />
 <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
     <div class="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -29,6 +34,15 @@
                 @error('description')
                     <p class="text-red-500 text-xs italic mt-2">{{ $message }}</p>
                 @enderror
+            </div>
+            <div>
+                <label for="status" class="block text-sm/6 font-medium text-gray-900 mb-2">Task Status</label>
+                <select name="status" id="status"
+                    class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-red-100 sm:text-sm/6">
+                    <option value="pending">Pending</option>
+                    <option value="in progress">In progress</option>
+                    <option value="completed">Completed</option>
+                </select>
             </div>
             <div class="flex space-x-10">
                 <button type="submit"

@@ -25,6 +25,18 @@
                         class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-red-100 sm:text-sm/6">
                 </div>
             </div>
+
+            {{-- Task Status Select Field --}}
+            <div>
+                <label for="status" class="block text-sm/6 font-medium text-gray-900 mb-2">Task Status</label>
+                <select name="status" id="status"
+                    class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-red-100 sm:text-sm/6">
+                    <option value="pending">Pending</option>
+                    <option value="in progress">In progress</option>
+                    <option value="completed">Completed</option>
+                </select>
+            </div>
+
             <div class="flex space-x-10">
                 <a href="/tasks/{{ $task->id }}" type="submit"
                     class="flex w-full justify-center px-3 py-1.5 text-sm/6 font-semibold text-red-500 hover:text-red-600 transition-colors duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus:outline-red-100">Cancel</a>

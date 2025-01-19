@@ -1,96 +1,45 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Models\Tasks;
+use App\Http\Controllers\TaskController;
+use App\Http\Controllers\SessionController;
+use App\Http\Controllers\RegisteredUserController;
 
 
 
-Route::get('/', function () {
-    return view('home');
-});
+Route::view('/', 'home');
 
 // route to fetch all tasks from database but limited to showing 5 results
-Route::get('/tasks', function () {
-    return view('tasks.index', [
-        'tasks' => Tasks::latest()->simplePaginate(6),
-    ]);
-});
+Route::get('/tasks', [TaskController::class, 'index']);
 
 // route to create a task
-Route::get('/tasks/create', function () {
-    return view('tasks.create');
-});
-
-// route to fetch respective task from database using id of the task
-Route::get('/tasks/{id}', function ($id) {
-    $task = Tasks::find($id);
-    return view('tasks.show', ['task' => $task]);
-});
+Route::get('/tasks/create', [TaskController::class, 'create']);
 
 // route to receive create task input field from form
-Route::post('/tasks', function () {
-    // validation
-    request()->validate([
-        'title' => ['required', 'min:10'],
-        'description' => ['required', 'min:100']
-    ]);
-    // creation of a task after validation
-    Tasks::create([
-        'title' => request('title'),
-        'description' => request('description'),
-        'user_id' => 1
-    ]);
-    // redirect once all above triggers
-    return redirect('/tasks');
-});
+Route::post('/tasks', [TaskController::class, 'store'])->middleware('auth');
+
+// route to fetch respective task from database using id of the task
+Route::get('/tasks/{id}', [TaskController::class, 'show']);
 
 // route to edit a task
-Route::get('/tasks/{id}/edit', function ($id) {
-    $task = Tasks::find($id);
-    return view('tasks.edit', ['task' => $task]);
-});
+Route::get('/tasks/{task}/edit', [TaskController::class, 'edit'])->middleware('auth', 'can:edit-task,task');
 
 // route to update a task
-Route::patch('/tasks/{id}', function ($id) {
-    // validation
-    request()->validate([
-        'title' => ['required'],
-        'description' => ['required']
-    ]);
-
-    // authorize
-    // update the task
-    $task = Tasks::findOrFail($id);
-    $task->update([
-        'title' => request('title'),
-        'description' => request('description'),
-    ]);
-
-    // redirect once the update complete
-    return redirect("/tasks/" . $task->id);
-});
+Route::patch('/tasks/{id}', [TaskController::class, 'update']);
 
 // route to delete a task
-Route::delete('/tasks/{id}', function ($id) {
-    // authorize on hold
-    // find the job
-    $task = Tasks::findOrFail($id);
-
-    // delete the job
-    $task->delete();
-
-    // redirect to tasks page
-    return redirect("/tasks");
-});
+Route::delete('/tasks/{id}', [TaskController::class, 'destroy']);
 
 Route::get('/login', function () {
-    return view('login');
+    return view('auth.login');
 });
 
-Route::get('/register', function () {
-    return view('register');
-});
+Route::get('/register', [RegisteredUserController::class, 'create']);
 
-Route::get('/about', function () {
-    return view('about');
-});
+Route::post('/register', [RegisteredUserController::class, 'store']);
+
+Route::get('/login', [SessionController::class, 'create'])->name('login');
+
+Route::post('/login', [SessionController::class, 'store']);
+
+Route::get('/logout', [SessionController::class, 'destroy']);
